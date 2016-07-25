@@ -32,6 +32,7 @@ main(int argc, char *argv[])
 char **
 character_name_completion(const char *text, int start, int end)
 {
+    printf("\ntext=\"%s\", start=%d, end=%d\n", text, start, end);
     rl_attempted_completion_over = 1;
     return rl_completion_matches(text, character_name_generator);
 }
