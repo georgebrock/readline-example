@@ -4,4 +4,4 @@ LDFLAGS ?= -L/usr/local/opt/readline/lib
 LIBS = -lreadline -lncurses
 
 rdemo: main.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $@ $?
+	$(CC) -Wall $(CFLAGS) $(LDFLAGS) $(LIBS) -o $@ $?
