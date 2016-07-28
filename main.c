@@ -1,3 +1,4 @@
+#include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +6,7 @@
 
 char **character_name_completion(const char *, int, int);
 char *character_name_generator(const char *, int);
+char *escape(const char *);
 
 char *character_names[] = {
     "Arthur Dent",
@@ -49,10 +51,52 @@ character_name_generator(const char *text, int state)
     }
 
     while ((name = character_names[list_index++])) {
+        if (rl_completion_quote_character) {
+            name = strdup(name);
+        } else {
+            name = escape(name);
+        }
+
         if (strncmp(name, text, len) == 0) {
-            return strdup(name);
+            return name;
+        } else {
+            free(name);
         }
     }
 
     return NULL;
+}
+
+char *
+escape(const char *original)
+{
+    size_t original_len;
+    int i, j;
+    char *escaped, *resized_escaped;
+
+    original_len = strlen(original);
+
+    if (original_len > SIZE_MAX / 2) {
+        errx(1, "string too long to escape");
+    }
+
+    if ((escaped = malloc(2 * original_len + 1)) == NULL) {
+        err(1, NULL);
+    }
+
+    for (i = 0, j = 0; i < original_len; ++i, ++j) {
+      if (original[i] == ' ') {
+          escaped[j++] = '\\';
+      }
+      escaped[j] = original[i];
+    }
+    escaped[j] = '\0';
+
+    if ((resized_escaped = realloc(escaped, j)) == NULL) {
+        free(escaped);
+        resized_escaped = NULL;
+        err(1, NULL);
+    }
+
+    return resized_escaped;
 }
