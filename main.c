@@ -7,6 +7,7 @@
 char **character_name_completion(const char *, int, int);
 char *character_name_generator(const char *, int);
 char *escape(const char *);
+int quote_detector(char *, int);
 
 char *character_names[] = {
     "Arthur Dent",
@@ -21,6 +22,8 @@ main(int argc, char *argv[])
 {
     rl_attempted_completion_function = character_name_completion;
     rl_completer_quote_characters = "'\"";
+    rl_completer_word_break_characters = " ";
+    rl_char_is_quoted_p = &quote_detector;
 
     printf("Who's your favourite Hitchiker's Guide character?\n");
     char *buffer = readline("> ");
@@ -99,4 +102,14 @@ escape(const char *original)
     }
 
     return resized_escaped;
+}
+
+int
+quote_detector(char *line, int index)
+{
+    return (
+        index > 0 &&
+        line[index - 1] == '\\' &&
+        !quote_detector(line, index - 1)
+    );
 }
