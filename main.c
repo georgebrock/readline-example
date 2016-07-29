@@ -18,6 +18,7 @@ int
 main(int argc, char *argv[])
 {
     rl_attempted_completion_function = character_name_completion;
+    rl_completer_quote_characters = "'\"";
 
     printf("Who's your favourite Hitchiker's Guide character?\n");
     char *buffer = readline("> ");
