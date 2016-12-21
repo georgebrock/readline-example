@@ -10,7 +10,12 @@ CHARACTER_NAMES = [
 Readline.completer_quote_characters = "\"'"
 
 Readline.completion_proc = proc do |input|
-  CHARACTER_NAMES.select { |name| name.start_with?(input) }
+  options = CHARACTER_NAMES
+  if Readline.completion_quote_character.nil?
+    options = options.map { |o| o.gsub(" ", "\\ ") }
+  end
+
+  options.select { |name| name.start_with?(input) }
 end
 
 puts "Who's your favourite Hitchiker's Guide character?"
