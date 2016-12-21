@@ -8,6 +8,12 @@ CHARACTER_NAMES = [
 ].freeze
 
 Readline.completer_quote_characters = "\"'"
+Readline.completer_word_break_characters = " "
+
+Readline.quoting_detection_proc = proc do |input, index|
+  index > 0 && input[index - 1] === "\\" &&
+    !Readline.quoting_detection_proc.call(input, index-1)
+end
 
 Readline.completion_proc = proc do |input|
   options = CHARACTER_NAMES
