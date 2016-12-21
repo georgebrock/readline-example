@@ -7,6 +7,8 @@ CHARACTER_NAMES = [
   "Zaphod Beeblebrox",
 ].freeze
 
+Readline.completer_quote_characters = "\"'"
+
 Readline.completion_proc = proc do |input|
   CHARACTER_NAMES.select { |name| name.start_with?(input) }
 end
