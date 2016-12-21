@@ -8,7 +8,6 @@ CHARACTER_NAMES = [
 ].freeze
 
 Readline.completion_proc = proc do |input|
-  puts "\ninput=#{input.inspect}"
   CHARACTER_NAMES.select { |name| name.start_with?(input) }
 end
 
